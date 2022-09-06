@@ -30,78 +30,6 @@ class TritonPythonModel:
         # You must parse model_config. JSON string is not parsed here
         self.model_config = json.loads(args['model_config'])
 
-#     def execute(self, requests):
-#         """`execute` must be implemented in every Python model. `execute`
-#         function receives a list of pb_utils.InferenceRequest as the only
-#         argument. This function is called when an inference request is made
-#         for this model. Depending on the batching configuration (e.g. Dynamic
-#         Batching) used, `requests` may contain multiple requests. Every
-#         Python model, must create one pb_utils.InferenceResponse for every
-#         pb_utils.InferenceRequest in `requests`. If there is an error, you can
-#         set the error argument when creating a pb_utils.InferenceResponse
-#         Parameters
-#         ----------
-#         requests : list
-#           A list of pb_utils.InferenceRequest
-#         Returns
-#         -------
-#         list
-#           A list of pb_utils.InferenceResponse. The length of this list must
-#           be the same as `requests`
-#         """
-
-#         responses = []
-#         # Every Python backend must iterate over everyone of the requests
-#         # and create a pb_utils.InferenceResponse for each of them.
-#         for request in requests:
-#             # Get INPUT0
-#             in_0 = pb_utils.get_input_tensor_by_name(request, "INPUT0")
-
-#             # Get INPUT1
-#             in_1 = pb_utils.get_input_tensor_by_name(request, "INPUT1")
-
-#             # Get Model Name
-#             model_name = pb_utils.get_input_tensor_by_name(
-#                 request, "MODEL_NAME")
-
-#             # Model Name string
-#             model_name_string = model_name.as_numpy()[0]
-
-#             # Create inference request object
-#             infer_request = pb_utils.InferenceRequest(
-#                 model_name=model_name_string,
-#                 requested_output_names=["OUTPUT0", "OUTPUT1"],
-#                 inputs=[in_0, in_1])
-
-#             # Perform synchronous blocking inference request
-#             infer_response = infer_request.exec()
-
-#             # Make sure that the inference response doesn't have an error. If
-#             # it has an error and you can't proceed with your model execution
-#             # you can raise an exception.
-#             if infer_response.has_error():
-#                 raise pb_utils.TritonModelException(
-#                     infer_response.error().message())
-
-#             # Create InferenceResponse. You can set an error here in case
-#             # there was a problem with handling this inference request.
-#             # Below is an example of how you can set errors in inference
-#             # response:
-#             #
-#             # pb_utils.InferenceResponse(
-#             #    output_tensors=..., TritonError("An error occured"))
-#             #
-#             # Because the infer_response of the models contains the final
-#             # outputs with correct output names, we can just pass the list
-#             # of outputs to the InferenceResponse object.
-#             inference_response = pb_utils.InferenceResponse(
-#                 output_tensors=infer_response.output_tensors())
-#             responses.append(inference_response)
-
-#         # You should return a list of pb_utils.InferenceResponse. Length
-#         # of this list must match the length of `requests` list.
-#         return responses
-    
     
     def execute(self, requests):
         """`execute` must be implemented in every Python model. `execute`
@@ -146,6 +74,8 @@ class TritonPythonModel:
                 # requested_output_names=["OUTPUT0", "OUTPUT1"],
                 requested_output_names=["OUTPUT0"],
                 inputs=[in_0])
+
+            print('Infer Request - ', infer_request)
 
             infer_response = infer_request.exec()
 
