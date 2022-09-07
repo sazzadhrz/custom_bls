@@ -78,7 +78,7 @@ class TritonPythonModel:
             # print('Infer Request - ', infer_request)
 
             infer_response = infer_request.exec()
-
+            print(in_0.shape)
             print(infer_response.output_tensors())
 
             if infer_response.has_error():
