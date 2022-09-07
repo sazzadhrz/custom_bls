@@ -7,7 +7,7 @@ model_name = "bls_sync"
 # shape = [4]
 
 with httpclient.InferenceServerClient("localhost:8000") as client:
-    input0_data = np.random.rand(3, 64, 64).astype(np.float32)
+    input0_data = np.random.rand(8, 3, 64, 64).astype(np.float32)
     
     inputs = [
         httpclient.InferInput("INPUT0", input0_data.shape,
