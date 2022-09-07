@@ -79,7 +79,7 @@ class TritonPythonModel:
 
             infer_response = infer_request.exec()
 
-            print(infer_response)
+            print(infer_response.output_tensors())
 
             if infer_response.has_error():
                 raise pb_utils.TritonModelException(
