@@ -75,9 +75,11 @@ class TritonPythonModel:
                 requested_output_names=["OUTPUT0"],
                 inputs=[in_0])
 
-            print('Infer Request - ', infer_request)
+            # print('Infer Request - ', infer_request)
 
             infer_response = infer_request.exec()
+
+            print(infer_response)
 
             if infer_response.has_error():
                 raise pb_utils.TritonModelException(
