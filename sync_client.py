@@ -20,7 +20,7 @@ with httpclient.InferenceServerClient("localhost:8000") as client:
     inputs[0].set_data_from_numpy(input0_data)
 
     # Will perform the inference request on the 'add_sub' model.
-    inputs[1].set_data_from_numpy(np.array(['resnet'], dtype=np.object_))
+    inputs[1].set_data_from_numpy(np.array(['equivalentnet'], dtype=np.object_))
 
     outputs = [
         httpclient.InferRequestedOutput("OUTPUT0"),
