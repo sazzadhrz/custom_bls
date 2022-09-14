@@ -10,7 +10,7 @@ with httpclient.InferenceServerClient("localhost:8000") as client:
     input0_data = np.random.rand(1, 64, 64).astype(np.float32)
     
     inputs = [
-        httpclient.InferInput("INPUT0", input0_data.shape,
+        httpclient.InferInput("INPUT__0", input0_data.shape,
                               np_to_triton_dtype(input0_data.dtype)),
 
         httpclient.InferInput("MODEL_NAME", [1],
@@ -23,7 +23,7 @@ with httpclient.InferenceServerClient("localhost:8000") as client:
     inputs[1].set_data_from_numpy(np.array(['equivalentnet'], dtype=np.object_))
 
     outputs = [
-        httpclient.InferRequestedOutput("OUTPUT0"),
+        httpclient.InferRequestedOutput("OUTPUT__0"),
     ]
 
     response = client.infer(model_name,
@@ -32,11 +32,11 @@ with httpclient.InferenceServerClient("localhost:8000") as client:
                             outputs=outputs)
 
     result = response.get_response()
-    output0_data = response.as_numpy("OUTPUT0")
+    output0_data = response.as_numpy("OUTPUT__0")
 
     
     print("=========='resnet' model result==========")
-    print("INPUT0 ({}) => OUTPUT0 ({})".format(
+    print("INPUT__0 ({}) => OUTPUT__0 ({})".format(
         input0_data.shape, output0_data.shape))
     
     
