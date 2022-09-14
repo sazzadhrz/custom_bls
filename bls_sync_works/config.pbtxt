@@ -1,0 +1,29 @@
+name: "bls_sync"
+backend: "python"
+
+input [
+  {
+    name: "MODEL_NAME"
+    data_type: TYPE_STRING
+    dims: [ 1 ]
+  }
+]
+
+input [
+  {
+    name: "INPUT__0"
+    data_type: TYPE_FP32
+    dims: [ -1, 1, 64, 64 ]
+  }
+]
+
+output [
+  {
+    name: "OUTPUT__0"
+    data_type: TYPE_FP32
+    dims: [ -1, 2 ]
+  }
+]
+
+
+instance_group [{ kind: KIND_CPU }]
