@@ -7,7 +7,7 @@ model_name = "bls_sync"
 # shape = [4]
 
 with httpclient.InferenceServerClient("localhost:8000") as client:
-    input0_data = np.random.rand(1, 64, 64).astype(np.float32)
+    input0_data = np.random.rand(8, 1, 64, 64).astype(np.float32)
     
     inputs = [
         httpclient.InferInput("INPUT__0", input0_data.shape,
@@ -35,7 +35,7 @@ with httpclient.InferenceServerClient("localhost:8000") as client:
     output0_data = response.as_numpy("OUTPUT__0")
 
     
-    print("=========='resnet' model result==========")
+    print("=========='Sazzads Equivalentnet' model result==========")
     print("INPUT__0 ({}) => OUTPUT__0 ({})".format(
         input0_data.shape, output0_data.shape))
     
