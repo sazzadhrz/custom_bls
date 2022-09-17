@@ -3,11 +3,11 @@ import tritonclient.http as httpclient
 import numpy as np
 import sys
 
-model_name = "bls_sync"
+model_name = "autonoise_bls"
 # shape = [4]
 
 with httpclient.InferenceServerClient("localhost:8000") as client:
-    input0_data = np.random.rand(8, 256, 512, 1).astype(np.float32)
+    input0_data = np.random.rand(32, 256, 512, 1).astype(np.float32)
     
     inputs = [
         httpclient.InferInput("input_3", input0_data.shape,
@@ -35,7 +35,7 @@ with httpclient.InferenceServerClient("localhost:8000") as client:
     output0_data = response.as_numpy("conv2d_17")
 
     
-    print("=========='Sazzads Equivalentnet' model result==========")
+    print("=========='AutoNoise CycleGan' model result==========")
     print("Input (input_3) ({}) => OUTPUT (conv2d_17) ({})".format(
         input0_data.shape, output0_data.shape))
     
