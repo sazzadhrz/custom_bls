@@ -1,0 +1,29 @@
+name: "autonoise_bls"
+backend: "python"
+
+input [
+  {
+    name: "MODEL_NAME"
+    data_type: TYPE_STRING
+    dims: [ 1 ]
+  }
+]
+
+input [
+  {
+    name: "input_3"
+    data_type: TYPE_FP32
+    dims: [ -1, 256, 512, 1 ]
+  }
+]
+
+output [
+  {
+    name: "conv2d_17"
+    data_type: TYPE_FP32
+    dims: [ -1, 256, 512, 1 ]
+  }
+]
+
+
+instance_group [{ kind: KIND_CPU }]
