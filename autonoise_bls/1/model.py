@@ -92,8 +92,10 @@ class TritonPythonModel:
             # ----------------------- Round 2 starts here ---------------------------------
 
             # extracting result from first run
-            output0_data = inference_response.as_numpy("conv2d_17")
+            # output0_data = inference_response.as_numpy("conv2d_17")
+            output0_data = pb_utils.get_output_tensor_by_name(inference_response, "conv2d_17")
             in_0 = output0_data
+            print(output0_data.shape)
 
             # Create inference request object
             infer_request = pb_utils.InferenceRequest(
