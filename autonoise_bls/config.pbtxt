@@ -1,4 +1,4 @@
-name: "bls_sync"
+name: "autonoise_bls"
 backend: "python"
 
 input [
