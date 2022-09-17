@@ -3,7 +3,6 @@
 # contains some utility functions for extracting information from model_config
 # and converting Triton input/output types to numpy types.
 import triton_python_backend_utils as pb_utils
-import tritonclient.http as httpclient
 import json
 
 
@@ -80,35 +79,6 @@ class TritonPythonModel:
 
             infer_response = infer_request.exec()
             print('Round 1 AutoNoise BLS')
-
-            if infer_response.has_error():
-                raise pb_utils.TritonModelException(
-                    infer_response.error().message())
-
-            inference_response = pb_utils.InferenceResponse(
-                output_tensors=infer_response.output_tensors())
-            # responses.append(inference_response)
-
-
-            # ----------------------- Round 2 starts here ---------------------------------
-
-            # extracting result from first run
-            output0_data = inference_response.as_numpy("conv2d_17")
-            # output0_data = pb_utils.get_output_tensor_by_name(inference_response, "input_3")
-            in_0 = output0_data
-            print(output0_data.shape)
-
-            # Create inference request object
-            infer_request = pb_utils.InferenceRequest(
-                model_name=model_name_string,
-                # requested_output_names=["OUTPUT0", "OUTPUT1"],
-                requested_output_names=["conv2d_17"],
-                inputs=[in_0])
-
-            # print('Infer Request - ', infer_request)
-
-            infer_response = infer_request.exec()
-            print('Round 2 AutoNoise BLS')
 
             if infer_response.has_error():
                 raise pb_utils.TritonModelException(
