@@ -57,10 +57,13 @@ class TritonPythonModel:
         # and create a pb_utils.InferenceResponse for each of them.
         for request in requests:
             # Get INPUT0
-            in_0 = pb_utils.get_input_tensor_by_name(request, "input_3")
+            # in_0 = pb_utils.get_input_tensor_by_name(request, "input_3")
+            input_as_triton_tensor = pb_utils.get_input_tensor_by_name(request, "image")
+            decoded_input = input_as_triton_tensor.as_numpy()[0].decode("utf-8")
 
-            # # Get INPUT1
-            # in_1 = pb_utils.get_input_tensor_by_name(request, "INPUT1")
+            # Preprocess - Split image to pieces
+            split_images = split_img(decoded_input, [256, 512])
+            in_0 = split_images
 
             # Get Model Name
             model_name = pb_utils.get_input_tensor_by_name(
@@ -72,21 +75,28 @@ class TritonPythonModel:
             # Create inference request object
             infer_request = pb_utils.InferenceRequest(
                 model_name=model_name_string,
-                # requested_output_names=["OUTPUT0", "OUTPUT1"],
                 requested_output_names=["conv2d_17"],
                 inputs=[in_0])
 
             # print('Infer Request - ', infer_request)
 
             infer_response = infer_request.exec()
-            print('Round 1 AutoNoise BLS')
+
 
             if infer_response.has_error():
                 raise pb_utils.TritonModelException(
                     infer_response.error().message())
 
+            clean_images = infer_response.output_tensors()
+
+            recons_img = merge_imgs(clean_images, decoded_input.shape)
+
+            # inference_response = pb_utils.InferenceResponse(
+            #     output_tensors=infer_response.output_tensors())
+
             inference_response = pb_utils.InferenceResponse(
-                output_tensors=infer_response.output_tensors())
+                output_tensors=recons_img)
+
             responses.append(inference_response)
 
         return responses

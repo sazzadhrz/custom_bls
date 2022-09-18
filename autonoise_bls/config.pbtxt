@@ -11,9 +11,9 @@ input [
 
 input [
   {
-    name: "input_3"
+    name: "image"
     data_type: TYPE_FP32
-    dims: [ -1, 256, 512, 1 ]
+    dims: [ -1 ]
   }
 ]
 
@@ -21,7 +21,7 @@ output [
   {
     name: "conv2d_17"
     data_type: TYPE_FP32
-    dims: [ -1, 256, 512, 1 ]
+    dims: [ -1 ]
   }
 ]
 

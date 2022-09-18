@@ -112,21 +112,21 @@ def merge_imgs(imgs, res):
 
 
 
-img = cv2.imread('/home/sazzad/Documents/GitHub/custom_bls/typewriter.jpg')
-print('original image shape', img.shape)
+# img = cv2.imread('/home/sazzad/Documents/GitHub/custom_bls/typewriter.jpg')
+# print('original image shape', img.shape)
 
-split_images = split_img(img, [256, 512])
+# split_images = split_img(img, [256, 512])
 
-print(len(split_images))
-print(split_images[0].shape)
+# print(len(split_images))
+# print(split_images[0].shape)
 
-############# run cyclegan here ################
+# ############# run cyclegan here ################
 
-# recons_img = _merge_imgs(clean_images, img.shape)
-
-
-recons_img = merge_imgs(split_images, img.shape)
-recons_img = cv2.cvtColor(recons_img,cv2.COLOR_GRAY2RGB)
+# # recons_img = _merge_imgs(clean_images, img.shape)
 
 
-print('recons_img shape', recons_img.shape)
+# recons_img = merge_imgs(split_images, img.shape)
+# recons_img = cv2.cvtColor(recons_img,cv2.COLOR_GRAY2RGB)
+
+
+# print('recons_img shape', recons_img.shape)
