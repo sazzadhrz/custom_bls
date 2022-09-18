@@ -3,6 +3,7 @@
 # contains some utility functions for extracting information from model_config
 # and converting Triton input/output types to numpy types.
 import triton_python_backend_utils as pb_utils
+from cyclegan_processing import split_img, merge_imgs
 import json
 
 
