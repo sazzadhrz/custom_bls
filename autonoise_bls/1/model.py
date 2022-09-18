@@ -4,6 +4,7 @@
 # and converting Triton input/output types to numpy types.
 import triton_python_backend_utils as pb_utils
 from cyclegan_processing import split_img, merge_imgs
+import numpy as np
 import json
 
 
@@ -59,11 +60,22 @@ class TritonPythonModel:
             # Get INPUT0
             # in_0 = pb_utils.get_input_tensor_by_name(request, "input_3")
             input_as_triton_tensor = pb_utils.get_input_tensor_by_name(request, "image")
-            decoded_input = input_as_triton_tensor.as_numpy()[0].decode("utf-8")
+            decoded_input = input_as_triton_tensor.as_numpy()[0].astype(np.float32)
 
             # Preprocess - Split image to pieces
             split_images = split_img(decoded_input, [256, 512])
-            in_0 = split_images
+            # in_0 = split_images
+
+            in_0 = pb_utils.Tensor("input_3", split_images)
+
+            # CALL BERT Model
+            # infer_request = pb_utils.InferenceRequest(
+            #     model_name="bert",
+            #     requested_output_names=[
+            #         "probabilities",
+            #     ],
+            #     inputs=processed_input,
+            # )
 
             # Get Model Name
             model_name = pb_utils.get_input_tensor_by_name(
@@ -91,11 +103,14 @@ class TritonPythonModel:
 
             recons_img = merge_imgs(clean_images, decoded_input.shape)
 
-            # inference_response = pb_utils.InferenceResponse(
-            #     output_tensors=infer_response.output_tensors())
+            recons_img = pb_utils.Tensor("clean_img", recons_img)
+
+            # Create InferenceResponse.
+            # inference_response = pb_utils.InferenceResponse(output_tensors=[out_tensor_0])
+            # responses.append(inference_response)
 
             inference_response = pb_utils.InferenceResponse(
-                output_tensors=recons_img)
+                output_tensors=[recons_img])
 
             responses.append(inference_response)
 
