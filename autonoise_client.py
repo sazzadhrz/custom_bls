@@ -36,7 +36,7 @@ with httpclient.InferenceServerClient("localhost:8000") as client:
 
     result = response.get_response()
     output0_data = response.as_numpy("clean_img")
-    cv2.imwrite('cleaned_from_triton.png', output0_data)
+    cv2.imwrite('cleaned_from_triton.png', output0_data*255.0)
     print('type(result)', type(result))
     print('type(output0_data)', type(output0_data))
 
