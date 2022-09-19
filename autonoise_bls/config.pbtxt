@@ -11,17 +11,17 @@ input [
 
 input [
   {
-    name: "input_3"
+    name: "image"
     data_type: TYPE_FP32
-    dims: [ -1, 256, 512, 1 ]
+    dims: [ -1, 3507, 2550, 3 ]
   }
 ]
 
 output [
   {
-    name: "conv2d_17"
+    name: "clean_img"
     data_type: TYPE_FP32
-    dims: [ -1, 256, 512, 1 ]
+    dims: [ -1, 3507, 2550, 3 ]
   }
 ]
 
