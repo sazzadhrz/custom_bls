@@ -7,6 +7,7 @@ from cyclegan.cyclegan_processing import split_img, merge_imgs
 from dbnet.dbnet_processing import det_preprocess, det_postprocess, detect_words
 import numpy as np
 import json
+import cv2
 
 
 class TritonPythonModel:
@@ -104,6 +105,7 @@ class TritonPythonModel:
 
             recons_img = merge_imgs(clean_images, decoded_input.shape)
             recons_img = recons_img*255.0
+            recons_img = cv2.cvtColor(recons_img, cv2.COLOR_GRAY2BGR)
 
 
             # DBNET STARTS HERE
@@ -113,7 +115,7 @@ class TritonPythonModel:
 
             for batch in processed_batches:
                 # predicted_batch = _det_predictor_jit(batch)
-                processed_input = [pb_utils.Tensor("input__0", batch)]
+                processed_input = pb_utils.Tensor("input__0", batch.numpy())
                 dbnet_infer_request = pb_utils.InferenceRequest(
                     model_name= "dbnet",
                     requested_output_names=["output__0"],

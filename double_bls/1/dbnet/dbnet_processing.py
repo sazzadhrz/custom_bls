@@ -1,9 +1,9 @@
 import numpy as np
 from typing import List
-from dbnet import DBPostProcessor, db_resnet50
-from preprocessor import PreProcessor
+from .dbnet import DBPostProcessor, db_resnet50
+from .preprocessor import PreProcessor
 
-det_predictor = db_resnet50(pretrained=True, assume_straight_pages=True)
+det_predictor = db_resnet50(pretrained=False, assume_straight_pages=True)
 det_predictor.eval()
 
 # def _det_predictor_jit(image):
