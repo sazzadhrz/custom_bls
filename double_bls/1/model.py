@@ -103,7 +103,7 @@ class TritonPythonModel:
             clean_images = infer_response.output_tensors()[0].as_numpy()
 
             recons_img = merge_imgs(clean_images, decoded_input.shape)
-
+            recons_img = recons_img*255.0
 
 
             # DBNET STARTS HERE
