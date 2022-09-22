@@ -115,7 +115,7 @@ class TritonPythonModel:
 
             for batch in processed_batches:
                 # predicted_batch = _det_predictor_jit(batch)
-                processed_input = pb_utils.Tensor("input__0", batch.numpy())
+                processed_input = pb_utils.Tensor("input__0", batch.detach().cpu().numpy())
                 dbnet_infer_request = pb_utils.InferenceRequest(
                     model_name= "dbnet",
                     requested_output_names=["output__0"],
@@ -132,6 +132,7 @@ class TritonPythonModel:
 
 
             word_segments = detect_words(recons_img, predicted_batches)
+            word_segments = np.asarray(word_segments)
             word_segments = pb_utils.Tensor("word_segments", word_segments)
 
             # processed_input = [
