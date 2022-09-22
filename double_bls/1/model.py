@@ -127,8 +127,8 @@ class TritonPythonModel:
                     raise pb_utils.TritonModelException(
                         dbnet_infer_response.error().message())
 
-                prob_map = dbnet_infer_response.output_tensors()[0].as_numpy()
-                prob_map = from_dlpack(prob_map.tp_dlpack())
+                prob_map = dbnet_infer_response.output_tensors()[0]
+                prob_map = from_dlpack(prob_map.to_dlpack())
                 predicted_batch = det_postprocess(prob_map)
                 predicted_batches.append(predicted_batch)
 
