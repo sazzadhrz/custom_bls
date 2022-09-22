@@ -9,7 +9,7 @@ model_name = "double_bls"
 
 with httpclient.InferenceServerClient("localhost:8000") as client:
     # input0_data = np.random.rand(4, 256, 512, 1).astype(np.float32)
-    input0_data = cv2.imread('./typewriter.jpg').astype(np.float32)
+    input0_data = cv2.imread('./buet.png').astype(np.float32)
     input0_data = np.expand_dims(input0_data, axis=0)
     
     inputs = [

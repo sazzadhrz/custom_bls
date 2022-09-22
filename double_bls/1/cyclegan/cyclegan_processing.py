@@ -45,6 +45,7 @@ def split_img(img, res):
             img = img[ht:ht + split_height, wd:wd + split_width]
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             #img = image.img_to_array(img).astype('float32')
+            img = np.expand_dims(img, axis=2)
 
             if ht == 0 and wd == 0:
                 image_list = np.expand_dims(img, axis=0)

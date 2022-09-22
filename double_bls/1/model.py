@@ -3,6 +3,7 @@
 # contains some utility functions for extracting information from model_config
 # and converting Triton input/output types to numpy types.
 import triton_python_backend_utils as pb_utils
+from torch.utils.dlpack import from_dlpack
 from cyclegan.cyclegan_processing import split_img, merge_imgs
 from dbnet.dbnet_processing import det_preprocess, det_postprocess, detect_words
 import numpy as np
@@ -127,6 +128,7 @@ class TritonPythonModel:
                         dbnet_infer_response.error().message())
 
                 prob_map = dbnet_infer_response.output_tensors()[0].as_numpy()
+                prob_map = from_dlpack(prob_map.tp_dlpack())
                 predicted_batch = det_postprocess(prob_map)
                 predicted_batches.append(predicted_batch)
 
