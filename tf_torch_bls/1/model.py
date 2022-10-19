@@ -5,7 +5,6 @@
 import triton_python_backend_utils as pb_utils
 from torch.utils.dlpack import from_dlpack
 from cyclegan.cyclegan_processing import split_img, merge_imgs
-from dbnet.dbnet_processing import det_preprocess, det_postprocess, detect_words
 import numpy as np
 import json
 import cv2
@@ -107,10 +106,12 @@ class TritonPythonModel:
             recons_img = merge_imgs(clean_images, decoded_input.shape)
             recons_img = recons_img*255.0
             recons_img = cv2.cvtColor(recons_img, cv2.COLOR_GRAY2BGR)
+            recons_img = np.transpose(recons_img, (2,0,1))
+            recons_img = np.expand_dims(recons_img, axis=0)
 
 
             # Pytorch Model starts from here
-            processed_clean_img = pb_utils.Tensor("input__0", recons_img.detach().cpu().numpy())
+            processed_clean_img = pb_utils.Tensor("input__0", recons_img)
 
             pytorch_infer_request = pb_utils.InferenceRequest(
                     model_name= "binary_pytorch",
@@ -129,7 +130,7 @@ class TritonPythonModel:
             responses.append(inference_response)
 
         return responses
-        
+
 
     def finalize(self):
         """`finalize` is called only once when the model is being unloaded.
