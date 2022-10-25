@@ -3,11 +3,8 @@
 # contains some utility functions for extracting information from model_config
 # and converting Triton input/output types to numpy types.
 import triton_python_backend_utils as pb_utils
-from torch.utils.dlpack import from_dlpack
-from cyclegan.cyclegan_processing import split_img, merge_imgs
 import numpy as np
 import json
-import cv2
 
 
 class TritonPythonModel:
@@ -64,11 +61,11 @@ class TritonPythonModel:
             input_as_triton_tensor = pb_utils.get_input_tensor_by_name(request, "image")
             decoded_input = input_as_triton_tensor.as_numpy()[0].astype(np.float32)
 
-            # Preprocess - Split image to pieces
-            split_images = split_img(decoded_input, [256, 512])
-            # in_0 = split_images
+            # Preprocess - convert to pytorch format and extend dim for batch
+            decoded_input = np.transpose(decoded_input, (2,0,1))
+            decoded_input = np.expand_dims(decoded_input, axis=0)
 
-            in_0 = pb_utils.Tensor("input_3", split_images)
+            in_0 = pb_utils.Tensor("input__0", decoded_input)
 
             # CALL BERT Model
             # infer_request = pb_utils.InferenceRequest(
@@ -89,7 +86,7 @@ class TritonPythonModel:
             # Create inference request object
             infer_request = pb_utils.InferenceRequest(
                 model_name=model_name_string,
-                requested_output_names=["conv2d_17"],
+                requested_output_names=["output__0"],
                 inputs=[in_0])
 
             # print('Infer Request - ', infer_request)
@@ -101,36 +98,22 @@ class TritonPythonModel:
                 raise pb_utils.TritonModelException(
                     infer_response.error().message())
 
-            clean_images = infer_response.output_tensors()[0].as_numpy()
+            # clean_images = infer_response.output_tensors()[0].as_numpy()
 
-            recons_img = merge_imgs(clean_images, decoded_input.shape)
-            recons_img = recons_img*255.0
-            recons_img = cv2.cvtColor(recons_img, cv2.COLOR_GRAY2BGR)
-            recons_img = np.transpose(recons_img, (2,0,1))
-            recons_img = np.expand_dims(recons_img, axis=0)
+            # recons_img = merge_imgs(clean_images, decoded_input.shape)
 
+            # recons_img = pb_utils.Tensor("clean_img", recons_img)
 
-            # Pytorch Model starts from here
-            processed_clean_img = pb_utils.Tensor("input__0", [recons_img])
-
-            pytorch_infer_request = pb_utils.InferenceRequest(
-                    model_name= "binary_pytorch",
-                    requested_output_names=["output__0"],
-                    inputs=[processed_clean_img])
-            pytorch_infer_response = pytorch_infer_request.exec()
-
-            if pytorch_infer_response.has_error():
-                raise pb_utils.TritonModelException(
-                    pytorch_infer_response.error().message())
-
+            # Create InferenceResponse.
+            # inference_response = pb_utils.InferenceResponse(output_tensors=[out_tensor_0])
+            # responses.append(inference_response)
 
             inference_response = pb_utils.InferenceResponse(
-                output_tensors=[pytorch_infer_response])
-
+                output_tensors=infer_response.output_tensors())
             responses.append(inference_response)
 
         return responses
-
+        
 
     def finalize(self):
         """`finalize` is called only once when the model is being unloaded.
