@@ -65,7 +65,7 @@ class TritonPythonModel:
             decoded_input = np.transpose(decoded_input, (2,0,1))
             decoded_input = np.expand_dims(decoded_input, axis=0)
 
-            in_0 = pb_utils.Tensor("input__0", decoded_input)
+            in_0 = pb_utils.Tensor("INPUT__0", decoded_input)
 
             # CALL BERT Model
             # infer_request = pb_utils.InferenceRequest(
@@ -86,7 +86,7 @@ class TritonPythonModel:
             # Create inference request object
             infer_request = pb_utils.InferenceRequest(
                 model_name=model_name_string,
-                requested_output_names=["output__0"],
+                requested_output_names=["OUTPUT__0"],
                 inputs=[in_0])
 
             # print('Infer Request - ', infer_request)

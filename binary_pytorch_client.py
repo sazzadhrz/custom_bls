@@ -44,25 +44,7 @@ with httpclient.InferenceServerClient("localhost:8000") as client:
     print("=========='Binary_Pytorch BLS' model result==========")
     print("Input ({}) => OUTPUT ({})".format(
         input0_data.shape, output0_data.shape))
-    
-    # ######################### second call #########################
-    # inputs[0].set_data_from_numpy(output0_data)
-
-    # response = client.infer(model_name,
-    #                         inputs,
-    #                         request_id=str(1),
-    #                         outputs=outputs)
-
-    # result = response.get_response()
-    # output0_data = response.as_numpy("conv2d_17")
-
-    # # print(response.get_response()['outputs'][0])
-
-    
-    # print("=========='AutoNoise CycleGan' model result==========")
-    # print("Input (input_3) ({}) => OUTPUT (conv2d_17) ({})".format(
-    #     input0_data.shape, output0_data.shape))
 
         
-    print('PASS: AutoNoise BLS Sync')
+    print('PASS: Binary_Pytorch BLS Sync')
     sys.exit(0)
